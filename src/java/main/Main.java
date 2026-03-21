@@ -1,5 +1,3 @@
-package java.main;
-
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.*;
@@ -24,10 +22,15 @@ public class Main {
 			int message_size = dis.readInt();
 			short request_api_version = dis.readShort();
 			short request_api_key = dis.readShort();
-			int correlation_id = Integer.parseInt(dis.readNBytes(4).toString(), 16);
+			int correlation_id = dis.readInt();
 
-			dos.writeInt(message_size);
+			dos.writeInt(0);
 			dos.writeInt(correlation_id);
+			if (request_api_version < 0 || request_api_version > 4) {
+				dos.writeShort(35);
+			} else {
+				dos.writeShort(0);
+			}
 
 			dos.flush();
 
